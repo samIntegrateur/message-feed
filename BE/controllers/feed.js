@@ -234,6 +234,54 @@ exports.deletePost = (req, res, next) => {
     });
 };
 
+exports.getStatus = (req, res, next) => {
+  const userId = req.userId;
+  User.findById(userId)
+    .then(user => {
+      res.status(200).json({
+        status: user.status,
+      })
+    })
+    .catch(err => {
+      if (!err.status) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.updateStatus = (req, res, next) => {
+  console.log('req.body', req.body)
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed, entered data is incorrect.');
+    error.statusCode = 422;
+    error.errorList = errors.array();
+    throw error;
+  }
+
+  const userId = req.userId;
+  const newStatus = req.body.newStatus;
+
+  User.findById(userId)
+    .then(user => {
+      user.status = newStatus;
+      return user.save();
+    })
+    .then(result => {
+      res.status(201).json({
+        status: newStatus,
+      })
+    })
+    .catch(err => {
+      if (!err.status) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
 const clearImage = filePath => {
   filePath = path.join(__dirname, '..', filePath);
   fs.unlink(filePath, err => console.error(err));

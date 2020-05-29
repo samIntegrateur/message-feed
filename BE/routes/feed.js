@@ -30,6 +30,15 @@ router.put('/post/:postId', isAuth, [
     .isLength({ min: 5 })
 ], feedController.updatePost)
 
-module.exports = router;
 
 router.delete('/post/:postId', isAuth, feedController.deletePost);
+
+router.get('/status', isAuth, feedController.getStatus)
+router.put('/status', isAuth, [
+  body('newStatus')
+    .trim()
+    .isString()
+    .isLength({ min: 3 }),
+], feedController.updateStatus)
+
+module.exports = router;
