@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const multer = require('multer');
 
-const dbConfig = require('./db-config');
+const { dbConfig } = require('./db-config');
 
 const feedRoutes = require('./routes/feed');
 const authRoutes = require('./routes/auth');

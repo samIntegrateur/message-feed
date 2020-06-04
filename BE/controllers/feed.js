@@ -73,7 +73,7 @@ exports.createPost = async (req, res, next) => {
     const user = await User.findById(req.userId);
     user.posts.push(post);
 
-    await user.save();
+    const savedUser = await user.save();
 
     // https://www.udemy.com/course/nodejs-the-complete-guide/learn/lecture/12167300#overview
     // We define an event / chanel
@@ -96,6 +96,8 @@ exports.createPost = async (req, res, next) => {
         }
       },
     });
+
+    return savedUser;
 
   } catch (err) {
     if (!err.status) {
